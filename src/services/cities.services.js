@@ -1,0 +1,1 @@
+//Não é permitido adicionar cidades com nomes repetidos, caso isso aconteça, emita o erro 409 (Conflict).
