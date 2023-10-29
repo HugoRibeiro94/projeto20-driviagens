@@ -1,18 +1,14 @@
-import { getCities, insertCities } from "../repositories/cities.repository.js";
+import httpStatus from "http-status";
+import { citiesService } from "../services/cities.services.js";
 
 export async function postCities(req, res){
     const {name} = req.body;
 
-    try{
+    await citiesService.existCity(name)
+    
+    await citiesService.insertCities(name)
 
-        await insertCities(name)
-        
-        const city = await getCities(name)
-        console.log(city);
+    const city = await citiesService.getCities(name)
 
-        res.status(201).send(city.rows[0])
-    }catch (err) {
-        console.log(err);
-        res.status(500).send(err.message)
-    }
+    res.status(httpStatus.CREATED).send(city.rows[0])
 }

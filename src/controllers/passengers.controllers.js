@@ -1,18 +1,14 @@
-import { getPassengers, insertPassengers } from "../repositories/passengers.repository.js";
+import httpStatus from "http-status";
+import { passengersService } from "../services/passengers.services.js";
 
 export async function postPassengers(req, res){
     const {firstName , lastName} = req.body;
-
-    try{
         
-        await insertPassengers(firstName , lastName)
+    await passengersService.insertPassengers(firstName , lastName)
         
-        const passenger = await getPassengers(firstName , lastName)
-        console.log(passenger);
+    const passenger = await passengersService.getPassengers(firstName , lastName)
+    console.log(passenger);
 
-        res.status(201).send(passenger.rows[0])
-    }catch (err) {
-        console.log(err);
-        res.status(500).send(err.message)
-    }
+    res.status(httpStatus.CREATED).send(passenger.rows[0])
+    
 }

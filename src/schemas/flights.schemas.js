@@ -1,12 +1,14 @@
-import JoiBase from 'joi'
+import Joi from 'joi'
 import JoiDate from "@joi/date"
 
-const Joi = JoiBase.extend(JoiDate)
+const extendedJoi = Joi.extend(JoiDate)
+
+const dateSchema = extendedJoi.date().format(["DD-MM-YYYY"]);
 
 export const flightsSchema = Joi.object({
 	origin: Joi.number().required(),
     destination: Joi.number().required(),
-    date: Joi.date().required()                  ////Formatar////
+    date: dateSchema                ////Formatar////
 })
 
 
