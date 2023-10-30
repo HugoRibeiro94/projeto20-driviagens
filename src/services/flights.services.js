@@ -1,12 +1,50 @@
+import dayjs from "dayjs";
 import { errors } from "../errors/errors.js";
 import { flightsRepository } from "../repositories/flights.repository.js";
 
+async function dateValidation(date){
+  function formatarData(data){
+    const dateDB = data.split('-');
+    if (dateDB.length === 3) {
+      const [dia, mes, ano] = dateDB;
+      if (dia.length === 2 && mes.length === 2 && ano.length === 4) {
+        return `${ano}-${mes}-${dia}`;
+      }
+    }
+  }
+  
+  const dateDB = formatarData(date)
+  console.log(dateDB);
+
+  const dataAtual = dayjs(Date.now()).format('YYYY-MM-DD')
+  console.log(dataAtual);
+
+  const dateValid = dayjs(dateDB).isBefore(dayjs(dataAtual))
+  console.log(dateValid);
+
+  if(dateValid === true) throw errors.incompleteDataError()
+}
 async function insertFlights (origin, destination,date){ 
-  await flightsRepository.insertFlights(origin, destination, date)
+  
+function formatarData(data){
+  const dateDB = data.split('-');
+  if (dateDB.length === 3) {
+    const [dia, mes, ano] = dateDB;
+    if (dia.length === 2 && mes.length === 2 && ano.length === 4) {
+      return `${ano}-${mes}-${dia}`;
+    }
+  }
+}
+
+const dateDB = formatarData(date)
+console.log(dateDB);
+  await flightsRepository.insertFlights(origin, destination, dateDB)
 }
 
 async function getFlights (){
   const result = await flightsRepository.getFlights()
+  result.rows.forEach( item => item.date = dayjs(item.date).format("DD-MM-YYYY"))
+  
   return result 
 }
 
@@ -29,20 +67,14 @@ async function findIdOrigin(origin){
   if(result.rows.length === 0) throw errors.notFound("Cidade")
   return result
 }
-export const flightsService = {insertFlights , getFlights , existFlights, findIdOrigin , findIdDestination}
+
+async function getAllFlights(origin , destination){
+  const result = await flightsRepository.getAllFlights(origin , destination)
+  result.rows.forEach( item => item.date = dayjs(item.date).format("DD-MM-YYYY"))
+  
+  return result
+}
+
+export const flightsService = {insertFlights , getFlights , existFlights, findIdOrigin , findIdDestination , getAllFlights ,dateValidation}
 
 
-/*function formatarData(data){
-    const dateDB = data.split('-');
-    if (dateDB.length === 3) {
-      const [dia, mes, ano] = dateDB;
-      if (dia.length === 2 && mes.length === 2 && ano.length === 4) {
-        return `${ano}-${mes}-${dia}`;
-      }
-    }
-  }
-
-  const dateDB = formatarData(date)*/
-//- [ ]  A cidades de origem e destino devem ser ids de cidades que existem na tabela `cities`. Caso não sejam, emita o erro `404 (Not Found)`.
-//- [ ]  Origem e destino devem ser diferentes. Caso não seja, emita o erro `409 (Conflict)`.
-//- [ ]  A data do vôo deve ser maior do que a data atual, caso não seja, emita o erro `422 (Unprocessable Entity)`

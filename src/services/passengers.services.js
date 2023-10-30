@@ -9,4 +9,9 @@ async function getPassengers (firstName,lastName){
     return result
 }
 
-export const passengersService = {insertPassengers , getPassengers}
+async function getPassengersTravels (name){
+    const result = await passengersRepository.getPassengersTravels(name)
+    return result
+}
+
+export const passengersService = {insertPassengers , getPassengers , getPassengersTravels}

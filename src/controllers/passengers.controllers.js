@@ -12,3 +12,13 @@ export async function postPassengers(req, res){
     res.status(httpStatus.CREATED).send(passenger.rows[0])
     
 }
+
+export async function getPassengersTravels(req, res){
+    const {name} = req.query;
+        
+    const passengerTravels = await passengersService.getPassengersTravels(name)
+    console.log(passengerTravels);
+
+    res.send(passengerTravels.rows)
+    
+}
