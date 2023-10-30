@@ -70,8 +70,23 @@ async function findIdOrigin(origin){
 
 async function getAllFlights(origin , destination){
   const result = await flightsRepository.getAllFlights(origin , destination)
-  result.rows.forEach( item => item.date = dayjs(item.date).format("DD-MM-YYYY"))
+
+  const dataAtual = new Date();
   
+  const datas = result.rows.map( item => item.date = dayjs(item.date).format("YYYY-MM-DD"))
+  console.log(datas);
+  const datasOrdenadas = datas.sort((a, b) => {
+    const dataA = new Date(a);
+    const dataB = new Date(b);
+    const diferencaA = Math.abs(dataA - dataAtual);
+    const diferencaB = Math.abs(dataB - dataAtual);
+    return diferencaA - diferencaB;
+  });
+  
+  console.log(datasOrdenadas);
+  console.log(result.rows);
+  
+  result.rows.forEach( item => item.date = dayjs(item.date).format("DD-MM-YYYY"))
   return result
 }
 
