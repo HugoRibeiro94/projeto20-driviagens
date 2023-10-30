@@ -1,11 +1,23 @@
 import db from "../database/database.connection.js";
 
-export function insertFlights(origin, destination, dateDB){
-    const result = db.query(`INSERT INTO flights (origin, destination, date) VALUES ('${origin}', '${destination}', '${dateDB}');`)
+function insertFlights(origin, destination, date){
+    const result = db.query(`INSERT INTO flights (destination, origin, date) VALUES ('${destination}', '${origin}', '${date}');`)
     return result
 }
 
-export function getFlights(origin, destination, dateDB){
-    const result = db.query(`SELECT * FROM fligths WHERE origin = '${origin}' AND destination = '${destination}' AND date = '${dateDB}';`)
+function getFlights(){
+    const result = db.query(`SELECT * FROM flights ORDER BY id DESC LIMIT 1;`)
     return result
 }
+
+function findIdDestination(destination){
+    const result = db.query(`SELECT * FROM cities WHERE id = '${destination}';`)
+    return result
+}
+
+function  findIdOrigin(origin){
+    const result = db.query(`SELECT * FROM cities WHERE id = '${origin}';`)
+    return result
+}
+
+export const flightsRepository = {insertFlights , getFlights , findIdDestination , findIdOrigin}

@@ -1,18 +1,18 @@
-import { getTravels, insertTravels } from "../repositories/travels.repository.js";
+import httpStatus from "http-status";
+import { travelsService } from "../services/travels.services.js";
 
 export async function postTravels(req, res){
     const {passengerId , flightId} = req.body;
 
-    try{
-        
-        await insertTravels(passengerId , flightId)
-        
-        const travel = await getTravels(passengerId , flightId)
-        console.log(travel);
+    await travelsService.findIdFlifght(flightId)
 
-        res.status(201).send(travel.rows[0])
-    }catch (err) {
-        console.log(err);
-        res.status(500).send(err.message)
-    }
+    await travelsService.findIdPassenger(passengerId)
+
+    await travelsService.insertTravels(passengerId , flightId)
+        
+    const travel = await travelsService.getTravels(passengerId , flightId)
+    console.log(travel);
+
+    res.status(httpStatus.CREATED).send(travel.rows[0])
+  
 }

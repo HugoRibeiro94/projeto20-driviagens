@@ -6,7 +6,7 @@ function insertPassengers(firstName,lastName){
 }
 
 function getPassengers(firstName,lastName){
-    const result = db.query(`SELECT * FROM passengers WHERE "firstName" = '${firstName}' AND "lastName" = '${lastName}';`)
+    const result = db.query(`SELECT * FROM passengers ORDER BY id DESC LIMIT 1;`)
     return result
 }
 
