@@ -25,6 +25,3 @@ async function findIdPassenger(passengerId){
 }
 
 export const travelsService = {insertTravels , getTravels , findIdFlifght , findIdPassenger}
-
-
-// - [ ]  O id do passageiro e do vôo devem ser ids existentes. Caso não sejam, emita o erro `404 (Not Found)`.

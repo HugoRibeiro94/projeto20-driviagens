@@ -14,30 +14,27 @@ async function dateValidation(date){
   }
   
   const dateDB = formatarData(date)
-  console.log(dateDB);
 
   const dataAtual = dayjs(Date.now()).format('YYYY-MM-DD')
-  console.log(dataAtual);
 
   const dateValid = dayjs(dateDB).isBefore(dayjs(dataAtual))
-  console.log(dateValid);
 
   if(dateValid === true) throw errors.incompleteDataError()
 }
+
 async function insertFlights (origin, destination,date){ 
   
-function formatarData(data){
-  const dateDB = data.split('-');
-  if (dateDB.length === 3) {
-    const [dia, mes, ano] = dateDB;
-    if (dia.length === 2 && mes.length === 2 && ano.length === 4) {
-      return `${ano}-${mes}-${dia}`;
+  function formatarData(data){
+    const dateDB = data.split('-');
+    if (dateDB.length === 3) {
+      const [dia, mes, ano] = dateDB;
+      if (dia.length === 2 && mes.length === 2 && ano.length === 4) {
+        return `${ano}-${mes}-${dia}`;
+      }
     }
   }
-}
 
-const dateDB = formatarData(date)
-console.log(dateDB);
+  const dateDB = formatarData(date)
   await flightsRepository.insertFlights(origin, destination, dateDB)
 }
 
@@ -61,6 +58,7 @@ async function findIdDestination(destination){
   if(result.rows.length === 0) throw errors.notFound("Cidade")
   return result
 }
+
 async function findIdOrigin(origin){
   const result = await flightsRepository.findIdOrigin(origin)
 
@@ -74,7 +72,6 @@ async function getAllFlights(origin , destination){
   const dataAtual = new Date();
   
   const datas = result.rows.map( item => item.date = dayjs(item.date).format("YYYY-MM-DD"))
-  console.log(datas);
   const datasOrdenadas = datas.sort((a, b) => {
     const dataA = new Date(a);
     const dataB = new Date(b);
@@ -82,9 +79,6 @@ async function getAllFlights(origin , destination){
     const diferencaB = Math.abs(dataB - dataAtual);
     return diferencaA - diferencaB;
   });
-  
-  console.log(datasOrdenadas);
-  console.log(result.rows);
   
   result.rows.forEach( item => item.date = dayjs(item.date).format("DD-MM-YYYY"))
   return result
